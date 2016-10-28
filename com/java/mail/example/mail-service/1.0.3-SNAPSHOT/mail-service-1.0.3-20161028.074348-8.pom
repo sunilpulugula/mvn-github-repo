@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.java.mail.example</groupId>
+    <artifactId>mail-service</artifactId>
+    <version>${buildVersion}</version>
+
+<!--
+    <distributionManagement>
+        <snapshotRepository>
+            <id>mvn-git-repo</id>
+            <uniqueVersion>true</uniqueVersion>
+            <name>maven git repository</name>
+            <url>file:/home/sunilp/IdeaProjects/mvn-github-repo</url>
+        </snapshotRepository>
+    </distributionManagement>
+-->
+
+
+    <properties>
+        <spring-version>4.2.0.RELEASE</spring-version>
+        <java-mail>1.4.3</java-mail>
+        <slf4j.version>1.7.12</slf4j.version>
+        <logback.version>1.1.2</logback.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- spring dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-support</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.javaparser</groupId>
+            <artifactId>javaparser</artifactId>
+            <version>1.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+
+        <!-- java mail dependencies -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>${java-mail}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${maven.build.timestamp}</finalName>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>current.date</name>
+                            <pattern>yyyyMMdd-HHmmss</pattern>
+                            <timeZone>GMT-5</timeZone>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <finalName>${project.artifactId}-${current.date}</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>snapshot-repo</id>
+            <activation>
+                <property>
+                    <name>snapshot</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <buildVersion>1.0.3-SNAPSHOT</buildVersion>
+            </properties>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>mvn-git-repo</id>
+                    <uniqueVersion>true</uniqueVersion>
+                    <name>maven git repository</name>
+                    <url>file:/home/sunilp/IdeaProjects/mvn-github-repo</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>local-repo</id>
+            <activation>
+                <property>
+                    <name>localrepo</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <properties>
+                <buildVersion>1.0.3</buildVersion>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>localrepo</id>
+                    <uniqueVersion>true</uniqueVersion>
+                    <name>maven local repository</name>
+                    <url>file:/home/sunilp/.m2/repository</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>Java.Net</id>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+    </repositories>
+
+</project>
